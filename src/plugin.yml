@@ -1,0 +1,29 @@
+version: 1.1
+name: Crypto
+main: fr.zeltaria.main.Main
+author: Zeltaria
+commands:
+  listcryptos:
+    description: Retourne la liste de toutes les cryptos prises en charge du plugin
+  infocrypto:
+    description: Retourne les informations de la crypto
+  buycrypto:
+    description: Acheter de la crypto
+  sellcrypto:
+    description: Vendre de la crypto
+  balanceallcryptos:
+    description: Retourne la quantité de chaque crypto que posséde le joueur
+  balancecrypto:
+    description: Retourne la quantité de la crypto choisie que le joueur posséde
+  addcrypto:
+    description: Ajoute X de la crypto choisie au joueur désigné
+    permission: crypto.addcrypto
+  removecrypto:
+    description: Enlève X de la crypto choisie au joueur désigné
+    permission: crypto.removecrypto
+  setcrypto:
+    description: Attribut un nombre X désigné de la crypto choisie au joueur désigné
+    permission: crypto.setcrypto
+  resetcrypto:
+    description: Remet à 0 toutes les cryptos du joueur désigné
+    permission: crypto.resetcrypto

@@ -1,0 +1,15 @@
+#Liste des abreviations des cryptos
+#Avant d'ajouter une crypto, vérifier avec le lien suivant si elle esr compatible avec l'API
+# https://api.binance.com/api/v3/ticker/price?symbol=()EUR
+# Remplacer les () par l'abrégé de la crypto -> exemple: BTCEUR ou ETHEUR
+cryptos:
+  - "BTC/Bitcoin"
+  - "ETH/Ethereum"
+  - "BNB/BNB"
+  - "CHZ/Chiliz"
+  - "DOGE/Dogecoin"
+  - "SHIB/Shiba Inu"
+  - "LTC/Litecoin"
+  - "ATOM/Cosmos"
+  - "TRX/Tron"
+  - "SOL/Solana"
