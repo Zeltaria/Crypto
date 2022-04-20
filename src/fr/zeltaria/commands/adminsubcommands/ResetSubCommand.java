@@ -29,7 +29,7 @@ public class ResetSubCommand extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/crypto admin reset <joueur>";
+        return "/crypto admin reset"+ChatColor.YELLOW+" <joueur>";
     }
 
     @Override

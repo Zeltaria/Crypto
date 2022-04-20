@@ -1,7 +1,8 @@
-package fr.zeltaria.commands.subcommands;
+package fr.zeltaria.commands.adminsubcommands;
 
 import fr.zeltaria.commands.SubCommand;
 import fr.zeltaria.main.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -14,35 +15,37 @@ public class BalanceSubCommand extends SubCommand {
 
     private final Main main;
 
-    public BalanceSubCommand(Main main) {this.main = main;}
+    public BalanceSubCommand(Main main){this.main = main;}
 
     @Override
     public String getName() {
-        return "balance";
+        return "admin";
     }
 
     @Override
     public String getDescription() {
-        return "Voir combien on a de la crypto";
+        return "Voir la balance de la crypto ou des cryptos du joueur désigné";
     }
 
     @Override
     public String getSyntax() {
-        return "/crypto balance"+ChatColor.YELLOW+" <crypto>";
+        return "/crypto admin balance "+ChatColor.YELLOW+"<joueur> <crypto>";
     }
 
     @Override
     public String getPermissions() {
-        return null;
+        return "crypto.otherbalance";
     }
 
     @Override
     public void perform(Player player, String[] args) {
-        if(args.length == 2) {
+        if(args.length == 4) {
             List<String> all = main.getConfig().getStringList("cryptos");
-            if (args[1].equalsIgnoreCase("all")) {
+            Player target = Bukkit.getPlayerExact(args[2]);
+            if (args[3].equalsIgnoreCase("all")) {
+                player.sendMessage(main.prefix + ChatColor.GRAY + "Balance des cryptos de " + ChatColor.LIGHT_PURPLE + args[2]);
                 final File file = new File(main.getDataFolder(), "balances.yml");
-                if(!file.exists()) {
+                if (!file.exists()) {
                     try {
                         file.createNewFile();
                     } catch (IOException e) {
@@ -52,23 +55,23 @@ public class BalanceSubCommand extends SubCommand {
                 final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
                 for (String crypto : all) {
                     String[] abv = crypto.split("/");
-                    String cle = player.getUniqueId()+"."+abv[0];
-                    if(!configuration.contains(cle)){
-                        configuration.set(cle,(double) 0);
+                    String cle = target.getUniqueId() + "." + abv[0];
+                    if (!configuration.contains(cle)) {
+                        configuration.set(cle, (double) 0);
                         try {
                             configuration.save(file);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     }
-                    player.sendMessage(main.prefix+ ChatColor.GREEN+abv[0]+": "+ChatColor.GOLD+configuration.get(cle));
+                    player.sendMessage(main.prefix + ChatColor.GREEN + abv[0] + ": " + ChatColor.GOLD + configuration.get(cle));
                 }
             }
-            else {
+            else{
                 int find = 0;
                 for (String crypto : all) {
                     String[] abv = crypto.split("/");
-                    if (args[1].equals(abv[0])) {
+                    if (args[3].equals(abv[0])) {
                         find = 1;
                         final File file = new File(main.getDataFolder(), "balances.yml");
                         if (!file.exists()) {
@@ -79,7 +82,7 @@ public class BalanceSubCommand extends SubCommand {
                             }
                         }
                         final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-                        String cle = player.getUniqueId() + "." + abv[0];
+                        String cle = target.getUniqueId() + "." + abv[0];
                         if (!configuration.contains(cle)) {
                             configuration.set(cle, (double) 0);
                             try {
@@ -88,21 +91,18 @@ public class BalanceSubCommand extends SubCommand {
                                 throw new RuntimeException(e);
                             }
                         }
-                        player.sendMessage(main.prefix + ChatColor.GREEN + abv[0] + ": " + ChatColor.GOLD + configuration.get(cle));
+                        player.sendMessage(main.prefix + ChatColor.GOLD + " " + args[2] + " " + ChatColor.GREEN + abv[0] + ": " + ChatColor.GOLD + configuration.get(cle));
                     }
                 }
                 if (find == 0) {
-                    player.sendMessage(main.prefix + ChatColor.RED + "La crypto " + ChatColor.BOLD + args[1] + ChatColor.RESET + ChatColor.RED + " n'existe pas ou n'est pas prise en charge par le plugin.");
+                    player.sendMessage(main.prefix + ChatColor.RED + "La crypto " + ChatColor.BOLD + args[3] + ChatColor.RESET + ChatColor.RED + " n'existe pas ou n'est pas prise en charge par le plugin.");
                 }
             }
         }
-        else{
-                player.sendMessage(main.prefix + ChatColor.RED + "Veuillez entrer la commande comme ceci: " + getSyntax());
-            }
     }
 
     @Override
     public String getSecondName() {
-        return null;
+        return "balance";
     }
 }

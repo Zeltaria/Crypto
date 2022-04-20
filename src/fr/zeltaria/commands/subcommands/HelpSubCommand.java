@@ -32,12 +32,17 @@ public class HelpSubCommand extends SubCommand {
         for(SubCommand command : CommandManager.getSubcommands()){
             if(command.getPermissions() != null){
                 if(player.hasPermission(command.getPermissions())){
-                    player.sendMessage(ChatColor.WHITE+"/"+command.getName()+ ChatColor.GOLD+ " - "+ command.getDescription());
+                    if(!command.getName().equalsIgnoreCase("admin")){
+                        player.sendMessage(ChatColor.WHITE+command.getSyntax()+ ChatColor.GOLD+ " - "+ command.getDescription());
+                    }
                 }
             }
             else{
-                player.sendMessage(ChatColor.WHITE+"/"+command.getName()+ ChatColor.GOLD+ " - "+ command.getDescription());
+                player.sendMessage(ChatColor.WHITE+command.getSyntax()+ ChatColor.GOLD+ " - "+ command.getDescription());
             }
+        }
+        if(player.hasPermission("crypto.admin")){
+            player.sendMessage(ChatColor.WHITE+"/crypto admin"+ ChatColor.GOLD+ " - Affiche la page d'aide des commandes admins");
         }
     }
 

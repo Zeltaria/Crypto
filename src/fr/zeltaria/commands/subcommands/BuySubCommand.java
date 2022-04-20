@@ -35,7 +35,7 @@ public class BuySubCommand extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/crypto buy <crypto> <montant>";
+        return "/crypto buy"+ChatColor.YELLOW+" <crypto> <montant>";
     }
 
     @Override

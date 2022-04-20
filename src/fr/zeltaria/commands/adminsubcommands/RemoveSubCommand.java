@@ -31,7 +31,7 @@ public class RemoveSubCommand extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/crypto admin remove <joueur> <crypto> <montant>";
+        return "/crypto admin remove"+ChatColor.YELLOW+" <joueur> <crypto> <montant>";
     }
 
     @Override

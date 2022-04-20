@@ -31,7 +31,7 @@ public class InfoSubCommand extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/crypto info <crypto>";
+        return "/crypto info"+ChatColor.YELLOW+" <crypto>";
     }
 
     @Override

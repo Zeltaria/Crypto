@@ -35,7 +35,7 @@ public class AddSubCommand extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/crypto admin add <joueur> <crypto> <montant>";
+        return "/crypto admin add "+ChatColor.YELLOW+"<joueur> <crypto> <montant>";
     }
 
     @Override
