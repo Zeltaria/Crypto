@@ -2,7 +2,6 @@ package fr.zeltaria.papi;
 
 import fr.zeltaria.main.Main;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -14,6 +13,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+
+import static java.lang.Double.parseDouble;
 
 public class CryptoExpansion extends PlaceholderExpansion {
 
@@ -71,7 +72,7 @@ public class CryptoExpansion extends PlaceholderExpansion {
                 }
                 return configuration.get(cle) + " " + abv[0];
             }
-            if (params.equals(abv[0] + "amount")) {
+            if (params.equals(abv[0] + "amount") || params.startsWith(abv[0] + "amount_")) {
                 URL url = null;
                 try {
                     url = new URL("https://api.binance.com/api/v3/ticker/price?symbol=" + abv[0] + "EUR");
@@ -96,7 +97,13 @@ public class CryptoExpansion extends PlaceholderExpansion {
                     try {
                         if ((inputLine = br.readLine()) == null) break;
                         String[] mots = inputLine.split("\"");
-                        return mots[7] + "€";
+                        if(params.startsWith(abv[0]+"amount_")){
+                            String s = params.replace(abv[0]+"amount_", "");
+                            if(parseDouble(s) > 0){
+                                return parseDouble(mots[7]) * parseDouble(s) + "€";
+                            }
+                        }
+                        return parseDouble(mots[7]) + "€";
                     } catch (IOException e) {
                         e.printStackTrace();
                         break;
