@@ -53,13 +53,17 @@ public class SellSubCommand extends SubCommand {
                 if (args[1].equals(abv[0])) {
                     find = 1;
                     final File file = new File(main.getDataFolder(), "balances.yml");
-                    if(!file.exists()) {
-                        try {
-                            file.createNewFile();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                    main.testFile(file);
+                    double amountP = main.getPlayerAmountCrypto(player,abv[0]);
+                    double amountC = main.getAmount(abv[0]);
+                    if(amountC == -1){
+                        player.sendMessage(main.prefix+ ChatColor.RED+"Une erreur est survenue avec le lecteur de crypto. Contactez l'administrateur pour résoudre le problème.");
                     }
+                    if(amountP == -1){
+                        player.sendMessage(main.prefix+ChatColor.RED+"La crypto "+ abv[0]+ " n'est pas prise en charge par le plugin, si cela est une erreur merci de contacter un administrateur.");
+                    }
+
+
                     final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
                     String cle = player.getUniqueId()+"."+abv[0];
                     if(!configuration.contains(cle)){

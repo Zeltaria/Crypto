@@ -19,7 +19,7 @@ import java.util.List;
 
 public class CommandManager implements TabExecutor {
 
-    private static ArrayList<SubCommand> subcommands = new ArrayList<>();
+    private static final ArrayList<SubCommand> subcommands = new ArrayList<>();
     private final Main main;
 
     public CommandManager(Main main) {
@@ -91,7 +91,9 @@ public class CommandManager implements TabExecutor {
                 if (c.getPermissions() != null) {
                     if (sender.hasPermission(c.getPermissions())) {
                         if(!result.contains(c.getName())) {
-                            result.add(c.getName());
+                            if(c.getName().startsWith(args[0])){
+                                result.add(c.getName());
+                            }
                         }
                     }
                 }
