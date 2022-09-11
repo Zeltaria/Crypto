@@ -22,6 +22,7 @@ public class CommandManager implements TabExecutor {
     private static final ArrayList<SubCommand> subcommands = new ArrayList<>();
     private final Main main;
 
+    // It's adding all the subcommands to the subcommands list.
     public CommandManager(Main main) {
         this.main = main;
         subcommands.add(new fr.zeltaria.commands.subcommands.HelpSubCommand());
@@ -38,6 +39,18 @@ public class CommandManager implements TabExecutor {
         subcommands.add(new fr.zeltaria.commands.adminsubcommands.BalanceSubCommand(main));
     }
 
+    /**
+     * If the sender is a player, if the command has arguments, if the first argument is "admin" and the player has the
+     * permission "crypto.admin", then it will check if the second argument is a subcommand and if it is, it will perform
+     * it. If the first argument is not "admin", it will check if the first argument is a subcommand and if it is, it will
+     * perform it. If the command has no arguments, it will perform the help subcommand
+     *
+     * @param sender The player who sent the command
+     * @param command The command that was executed
+     * @param label The name of the command that was used.
+     * @param args The arguments of the command.
+     * @return The return type of the method.
+     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player p) {
@@ -82,29 +95,39 @@ public class CommandManager implements TabExecutor {
         return subcommands;
     }
 
+    /**
+     * If the player has typed in one argument, then return a list of all the subcommands that the player has permission to
+     * use. If the player has typed in two arguments, then return a list of all the cryptocurrencies that the player can
+     * use. If the player has typed in three arguments, then return a list of all the players that the player can use. If
+     * the player has typed in four arguments, then return a list of all the cryptocurrencies that the player can use
+     *
+     * @param sender The person who sent the command.
+     * @param command The command that was executed
+     * @param label The command label
+     * @param args The arguments that were passed to the command.
+     * @return A list of strings
+     */
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         List<String> result = new ArrayList<>();
         List<String> all = main.getConfig().getStringList("cryptos");
-        if(args.length == 1){
-            for(SubCommand c : getSubcommands()) {
-                if (c.getPermissions() != null) {
-                    if (sender.hasPermission(c.getPermissions())) {
-                        if(!result.contains(c.getName())) {
-                            if(c.getName().startsWith(args[0])){
-                                result.add(c.getName());
+        switch(args.length) {
+            case 1:
+                for (SubCommand c : getSubcommands()) {
+                    if (c.getPermissions() != null) {
+                        if (sender.hasPermission(c.getPermissions())) {
+                            if (!result.contains(c.getName())) {
+                                if (c.getName().startsWith(args[0])) {
+                                    result.add(c.getName());
+                                }
                             }
                         }
+                    } else {
+                        result.add(c.getName());
                     }
                 }
-                else{
-                    result.add(c.getName());
-                }
-            }
-            return result;
-        }
-        else{
-            if(args.length == 2){
+                return result;
+            case 2:
                 if(args[0].equalsIgnoreCase("admin")){
                     if(sender.hasPermission("crypto.admin")){
                         for(SubCommand c : getSubcommands()) {
@@ -121,7 +144,7 @@ public class CommandManager implements TabExecutor {
                 }
                 else{
                     if(args[0].equalsIgnoreCase("balance") || args[0].equalsIgnoreCase("sell") || args[0].equalsIgnoreCase("buy")
-                    || args[0].equalsIgnoreCase("info")) {
+                            || args[0].equalsIgnoreCase("info")) {
                         for (String crypto : all) {
                             String[] abv = crypto.split("/");
                             result.add(abv[0]);
@@ -132,42 +155,36 @@ public class CommandManager implements TabExecutor {
                         return result;
                     }
                 }
-            }
-            else{
-                if(args.length == 3){
-                    if(args[0].equalsIgnoreCase("admin")){
-                        if(sender.hasPermission("crypto.admin")){
-                            if(args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("reset") || args[1].equalsIgnoreCase("remove")
-                            || args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("balance")){
-                                for(Player p : Bukkit.getOnlinePlayers()){
-                                    result.add(p.getName());
-                                }
-                                return result;
+            case 3:
+                if(args[0].equalsIgnoreCase("admin")){
+                    if(sender.hasPermission("crypto.admin")){
+                        if(args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("reset") || args[1].equalsIgnoreCase("remove")
+                                || args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("balance")){
+                            for(Player p : Bukkit.getOnlinePlayers()){
+                                result.add(p.getName());
                             }
+                            return result;
                         }
                     }
                 }
-                else{
-                    if(args.length == 4){
-                        if(args[0].equalsIgnoreCase("admin")) {
-                            if (sender.hasPermission("crypto.admin")) {
-                                if(args[1].equalsIgnoreCase("balance") || args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("remove")
+            case 4:
+                if(args[0].equalsIgnoreCase("admin")) {
+                    if (sender.hasPermission("crypto.admin")) {
+                        if(args[1].equalsIgnoreCase("balance") || args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("remove")
                                 || args[1].equalsIgnoreCase("add")){
-                                    for (String crypto : all) {
-                                        String[] abv = crypto.split("/");
-                                        result.add(abv[0]);
-                                    }
-                                    if(args[1].equalsIgnoreCase("balance")){
-                                        result.add("all");
-                                    }
-                                    return result;
-                                }
+                            for (String crypto : all) {
+                                String[] abv = crypto.split("/");
+                                result.add(abv[0]);
                             }
+                            if(args[1].equalsIgnoreCase("balance")){
+                                result.add("all");
+                            }
+                            return result;
                         }
                     }
                 }
-            }
+                default:
+                    return Collections.singletonList("");
         }
-        return Collections.singletonList("");
     }
 }
