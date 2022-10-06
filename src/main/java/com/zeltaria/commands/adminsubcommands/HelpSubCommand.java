@@ -2,8 +2,6 @@ package com.zeltaria.commands.adminsubcommands;
 
 import com.zeltaria.commands.CommandManager;
 import com.zeltaria.commands.SubCommand;
-import fr.zeltaria.commands.CommandManager;
-import fr.zeltaria.commands.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

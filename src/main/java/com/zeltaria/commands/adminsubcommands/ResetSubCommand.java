@@ -2,8 +2,6 @@ package com.zeltaria.commands.adminsubcommands;
 
 import com.zeltaria.commands.SubCommand;
 import com.zeltaria.crypto.Main;
-import fr.zeltaria.commands.SubCommand;
-import fr.zeltaria.main.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
