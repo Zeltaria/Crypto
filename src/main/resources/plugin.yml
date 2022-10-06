@@ -1,0 +1,12 @@
+name: Crypto
+version: '${project.version}'
+main: com.zeltaria.crypto.Main
+api-version: 1.17
+prefix: Crypto
+depend: [ Vault ]
+softdepend: [ PlaceholderAPI ]
+authors: [ Zeltaria ]
+description: Plugin where you can buy crypto with in game monney
+commands:
+  crypto:
+    description: Basic command of the plugin
